@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Добро пожаловать в сервис «Силант»</h1>
+  <p>Введите заводской номер погрузчика для просмотра информации:</p>
+
+  <form method="get" action="{% url 'machine_search' %}">
+    <input type="text" name="factory_number" placeholder="Зав. номер машины">
+    <button type="submit">Поиск</button>
+  </form>
+{% endblock %}

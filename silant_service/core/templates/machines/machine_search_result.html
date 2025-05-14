@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Результат поиска</h2>
+
+  {% if machine %}
+    <ul>
+      <li><strong>Зав. №:</strong> {{ machine.factory_number }}</li>
+      <li><strong>Модель:</strong> {{ machine.model }}</li>
+      <li><strong>Двигатель:</strong> {{ machine.engine_model }}</li>
+      <li><strong>Трансмиссия:</strong> {{ machine.transmission_model }}</li>
+      <li><strong>Ведущий мост:</strong> {{ machine.drive_axle_model }}</li>
+      <li><strong>Управляемый мост:</strong> {{ machine.steer_axle_model }}</li>
+      <li><strong>Дата отгрузки:</strong> {{ machine.shipment_date }}</li>
+    </ul>
+  {% elif query %}
+    <p>Машина с номером <strong>{{ query }}</strong> не найдена.</p>
+  {% endif %}
+
+  <a href="{% url 'home' %}">← На главную</a>
+{% endblock %}

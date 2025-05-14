@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Машины</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+<h1>Список погрузчиков</h1>
+
+<form method="get">
+    <input type="text" name="equipment_model" placeholder="Модель техники" value="{{ request.GET.equipment_model }}">
+    <input type="text" name="service_company" placeholder="Сервисная компания"
+           value="{{ request.GET.service_company }}">
+    <select name="sort_by">
+        <option value="">Сортировка</option>
+        <option value="shipment_date">Дата отгрузки ↑</option>
+        <option value="-shipment_date">Дата отгрузки ↓</option>
+    </select>
+    <button type="submit">Фильтр</button>
+</form>
+
+<table>
+    <tr>
+        <th>Зав. номер</th>
+        <th>Модель техники</th>
+        <th>Сервисная компания</th>
+        <th>Дата отгрузки</th>
+    </tr>
+    {% for machine in machines %}
+    <tr onclick="window.location.href='{% url 'machine_detail' machine.pk %}'" style="cursor: pointer;">
+        <td>{{ machine.factory_number }}</td>
+        <td>{{ machine.equipment_model }}</td>
+        <td>{{ machine.service_company }}</td>
+        <td>{{ machine.shipment_date }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">Нет данных</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if is_paginated %}
+<div>
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">Назад</a>
+    {% endif %}
+
+    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Вперёд</a>
+    {% endif %}
+</div>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Моя техника</h2>
+
+  <!-- Форма фильтрации -->
+  <form method="get" style="margin-bottom: 20px;">
+    <input type="text" name="model" placeholder="Модель" value="{{ request.GET.model }}">
+    <input type="text" name="engine_model" placeholder="Двигатель" value="{{ request.GET.engine_model }}">
+    <input type="text" name="transmission_model" placeholder="Трансмиссия" value="{{ request.GET.transmission_model }}">
+    <input type="text" name="drive_axle_model" placeholder="Ведущий мост" value="{{ request.GET.drive_axle_model }}">
+    <input type="text" name="steer_axle_model" placeholder="Управляемый мост" value="{{ request.GET.steer_axle_model }}">
+
+    <select name="sort_by">
+      <option value="">Сортировка по дате</option>
+      <option value="shipment_date" {% if request.GET.sort_by == "shipment_date" %}selected{% endif %}>Дата отгрузки ↑</option>
+      <option value="-shipment_date" {% if request.GET.sort_by == "-shipment_date" %}selected{% endif %}>Дата отгрузки ↓</option>
+    </select>
+
+    <button type="submit">Применить</button>
+  </form>
+
+  <!-- Таблица -->
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Зав. номер</th>
+        <th>Модель</th>
+        <th>Производитель</th>
+        <th>Двигатель</th>
+        <th>Трансмиссия</th>
+        <th>Ведущий мост</th>
+        <th>Управляемый мост</th>
+        <th>Дата отгрузки</th>
+        <th>Адрес поставки</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for machine in machines %}
+        <tr onclick="window.location.href='{% url 'machine_detail' machine.pk %}'" style="cursor: pointer;">
+          <td>{{ machine.factory_number }}</td>
+          <td>{{ machine.model }}</td>
+          <td>{{ machine.manufacturer }}</td>
+          <td>{{ machine.engine_model }}</td>
+          <td>{{ machine.transmission_model }}</td>
+          <td>{{ machine.drive_axle_model }}</td>
+          <td>{{ machine.steer_axle_model }}</td>
+          <td>{{ machine.shipment_date }}</td>
+          <td>{{ machine.delivery_address }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="9">Нет техники</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

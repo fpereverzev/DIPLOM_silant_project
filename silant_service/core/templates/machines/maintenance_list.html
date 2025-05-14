@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Технические обслуживания</h2>
+<form method="get">
+  <input type="text" name="machine" placeholder="Зав. № машины" value="{{ request.GET.machine }}">
+  <input type="text" name="maintenance_type" placeholder="Тип ТО" value="{{ request.GET.maintenance_type }}">
+  <input type="text" name="service_company" placeholder="Сервисная компания" value="{{ request.GET.service_company }}">
+  <select name="sort_by">
+    <option value="-date">По дате ↓</option>
+    <option value="date">По дате ↑</option>
+  </select>
+  <button type="submit">Фильтр</button>
+</form>
+
+<table border="1">
+  <tr>
+    <th>Машина</th>
+    <th>Тип ТО</th>
+    <th>Дата</th>
+    <th>Наработка</th>
+    <th>№ заказ-наряда</th>
+    <th>Сервисная компания</th>
+  </tr>
+  {% for item in maintenances %}
+    <tr>
+      <td>{{ item.machine.factory_number }}</td>
+      <td>{{ item.maintenance_type }}</td>
+      <td>{{ item.date }}</td>
+      <td>{{ item.operating_hours }}</td>
+      <td>{{ item.work_order_number }}</td>
+      <td>{{ item.service_company.get_full_name }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6">Нет данных</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

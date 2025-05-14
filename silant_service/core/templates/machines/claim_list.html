@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Рекламации</h2>
+<form method="get">
+  <input type="text" name="failure_node" placeholder="Узел отказа" value="{{ request.GET.failure_node }}">
+  <input type="text" name="repair_method" placeholder="Способ восстановления" value="{{ request.GET.repair_method }}">
+  <input type="text" name="service_company" placeholder="Сервисная компания" value="{{ request.GET.service_company }}">
+  <select name="sort_by">
+    <option value="-claim_date">По дате отказа ↓</option>
+    <option value="claim_date">По дате отказа ↑</option>
+  </select>
+  <button type="submit">Фильтр</button>
+</form>
+
+<table border="1">
+  <tr>
+    <th>Машина</th>
+    <th>Дата отказа</th>
+    <th>Наработка</th>
+    <th>Узел отказа</th>
+    <th>Описание</th>
+    <th>Способ восстановления</th>
+    <th>Дата восстановления</th>
+    <th>Сервисная компания</th>
+  </tr>
+  {% for claim in claims %}
+    <tr>
+      <td>{{ claim.machine.factory_number }}</td>
+      <td>{{ claim.claim_date }}</td>
+      <td>{{ claim.operating_hours }}</td>
+      <td>{{ claim.failure_node }}</td>
+      <td>{{ claim.failure_description }}</td>
+      <td>{{ claim.repair_method }}</td>
+      <td>{{ claim.recovery_date }}</td>
+      <td>{{ claim.service_company.get_full_name }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="8">Нет данных</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

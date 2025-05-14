@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Обслуживаемые машины</h1>
+  {% if machines %}
+    <ul>
+      {% for machine in machines %}
+        <li>
+          <a href="{% url 'machine_detail' machine.pk %}">
+            {{ machine.model }} — {{ machine.factory_number }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Нет машин, обслуживаемых вашей организацией.</p>
+  {% endif %}
+{% endblock %}

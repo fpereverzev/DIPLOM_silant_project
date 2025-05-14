@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Информация о машине {{ machine.model }} ({{ machine.factory_number }})</h1>
+
+<table>
+    <tr>
+        <th>Производитель:</th>
+        <td>{{ machine.manufacturer }}</td>
+    </tr>
+    <tr>
+        <th>Модель двигателя:</th>
+        <td>{{ machine.engine_model }}</td>
+    </tr>
+    <tr>
+        <th>Модель трансмиссии:</th>
+        <td>{{ machine.transmission_model }}</td>
+    </tr>
+    <tr>
+        <th>Модель ведущего моста:</th>
+        <td>{{ machine.drive_axle_model }}</td>
+    </tr>
+    <tr>
+        <th>Модель управляемого моста:</th>
+        <td>{{ machine.steer_axle_model }}</td>
+    </tr>
+    <tr>
+        <th>Договор поставки:</th>
+        <td>{{ machine.supply_contract }}</td>
+    </tr>
+    <tr>
+        <th>Дата отгрузки:</th>
+        <td>{{ machine.shipment_date }}</td>
+    </tr>
+    <tr>
+        <th>Грузополучатель:</th>
+        <td>{{ machine.consignee }}</td>
+    </tr>
+    <tr>
+        <th>Адрес поставки:</th>
+        <td>{{ machine.delivery_address }}</td>
+    </tr>
+    <tr>
+        <th>Место эксплуатации:</th>
+        <td>{{ machine.exploitation_place }}</td>
+    </tr>
+    <tr>
+        <th>Клиент:</th>
+        <td>{{ machine.client.get_full_name }}</td>
+    </tr>
+</table>
+<h2>Проведённые ТО</h2>
+{% if maintenances %}
+<table>
+    <tr>
+        <th>Тип ТО</th>
+        <th>Дата</th>
+        <th>Наработка, м/ч</th>
+        <th>№ заказ-наряда</th>
+        <th>Дата заказ-наряда</th>
+        <th>Сервисная компания</th>
+    </tr>
+    {% for item in maintenances %}
+    <tr>
+        <td>{{ item.maintenance_type }}</td>
+        <td>{{ item.date }}</td>
+        <td>{{ item.operating_hours }}</td>
+        <td>{{ item.work_order_number }}</td>
+        <td>{{ item.order_date }}</td>
+        <td>{{ item.service_company.get_full_name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>ТО не проводились.</p>
+{% endif %}
+
+<h2>Рекламации</h2>
+{% if claims %}
+<table>
+    <tr>
+        <th>Дата рекламации</th>
+        <th>Наработка</th>
+        <th>Узел отказа</th>
+        <th>Описание</th>
+        <th>Способ восстановления</th>
+        <th>Использованные запчасти</th>
+        <th>Дата восстановления</th>
+        <th>Сервисная компания</th>
+    </tr>
+    {% for claim in claims %}
+    <tr>
+        <td>{{ claim.claim_date }}</td>
+        <td>{{ claim.operating_hours }}</td>
+        <td>{{ claim.failure_node }}</td>
+        <td>{{ claim.failure_description }}</td>
+        <td>{{ claim.repair_method }}</td>
+        <td>{{ claim.used_parts }}</td>
+        <td>{{ claim.recovery_date }}</td>
+        <td>{{ claim.service_company.get_full_name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Рекламаций не найдено.</p>
+{% endif %}
+
+{% endblock %}
