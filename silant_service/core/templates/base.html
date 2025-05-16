@@ -2,16 +2,116 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Силант</title>
+    <style>
+        body {
+            font-family: "PT Astra Sans", sans-serif;
+            background-color: #EBE6D6;
+            margin: 0;
+            padding: 20px;
+        }
+        header, footer {
+            background-color: #163E6C;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        a { color: #D20A11; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #163E6C;
+            color: white;
+            cursor: pointer;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        form input, form select, form button {
+            margin: 5px 5px 5px 0;
+            padding: 5px;
+        }
+        @media screen and (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead tr {
+                display: none;
+            }
+            td {
+                position: relative;
+                padding-left: 50%;
+                border: 1px solid #ddd;
+            }
+            td::before {
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                width: 45%;
+                font-weight: bold;
+                white-space: nowrap;
+            }
+        }
+    </style>
+    <script>
+        function sortTable(n) {
+          const table = document.getElementById("data-table");
+          let switching = true, dir = "asc", switchcount = 0;
+
+          while (switching) {
+            switching = false;
+            const rows = table.rows;
+            for (let i = 1; i < rows.length - 1; i++) {
+              let shouldSwitch = false;
+              const x = rows[i].getElementsByTagName("TD")[n];
+              const y = rows[i + 1].getElementsByTagName("TD")[n];
+              if ((dir === "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) ||
+                  (dir === "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+            if (shouldSwitch) {
+              rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+              switching = true;
+              switchcount++;
+            } else if (switchcount === 0 && dir === "asc") {
+              dir = "desc";
+              switching = true;
+            }
+          }
+        }
+    </script>
 </head>
 <body>
-    {% if user.is_authenticated %}
-      <p>Вы вошли как {{ user.username }} | <a href="{% url 'admin:logout' %}">Выйти</a></p>
-    {% else %}
-      <p><a href="{% url 'admin:login' %}">Войти</a></p>
-    {% endif %}
+<header>
+    <h1>Сервис «Силант»</h1>
+</header>
 
-    {% block content %}
-    {% endblock %}
+{% if user.is_authenticated %}
+  <p>Вы вошли как {{ user.username }} | <a href="{% url 'admin:logout' %}">Выйти</a></p>
+{% else %}
+  <p><a href="{% url 'admin:login' %}">Войти</a></p>
+{% endif %}
+
+<main>
+{% block content %}
+{% endblock %}
+</main>
+
+<footer>
+    <p>&copy; Силант, 2025</p>
+</footer>
 </body>
 </html>
